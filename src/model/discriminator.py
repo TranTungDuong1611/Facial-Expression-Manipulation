@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 
 class Discriminator(nn.Module):
-    def __int__(self, au_dims, img_size=128, conv_dims=64, num_repeat=6):
+    def __init__(self, au_dims, img_size=128, conv_dims=64, num_repeat=6):
         super(Discriminator, self).__init__()
         
         layers = []
