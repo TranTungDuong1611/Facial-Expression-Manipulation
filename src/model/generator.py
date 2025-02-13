@@ -12,7 +12,7 @@ class Generator(nn.Module):
         # convolution down
         self.conv1_down = nn.Sequential(
             nn.Conv2d(
-                in_channels=(au_dims+3),
+                in_channels=au_dims+3,
                 out_channels=self.conv_dim,
                 kernel_size=7,
                 stride=1,
@@ -99,7 +99,7 @@ class Generator(nn.Module):
             ),
             nn.InstanceNorm2d(self.conv_dim*4, affine=True),
             nn.ReLU()
-        ),
+        )
         
         self.conv3_up = nn.Sequential(
             nn.ConvTranspose2d(
@@ -112,7 +112,7 @@ class Generator(nn.Module):
             ),
             nn.InstanceNorm2d(self.conv_dim*2, affine=True),
             nn.ReLU()
-        ),
+        )
         
         self.conv2_up = nn.Sequential(
             nn.ConvTranspose2d(
@@ -125,7 +125,7 @@ class Generator(nn.Module):
             ),
             nn.InstanceNorm2d(self.conv_dim, affine=True),
             nn.ReLU()
-        ),
+        )
         
         self.conv1_up_image_reg = nn.Sequential(
             nn.ConvTranspose2d(
@@ -137,7 +137,7 @@ class Generator(nn.Module):
                 bias=False
             ),
             nn.Tanh()
-        ),
+        )
         
         self.conv1_up_attention_reg = nn.Sequential(
             nn.ConvTranspose2d(
@@ -155,17 +155,17 @@ class Generator(nn.Module):
         c = c.unsqueeze(2).unsqueeze(3)
         c = c.expand(c.size(0), c.size(1), x.size(2), x.size(3))
         x = torch.cat([x, c], dim=1)
-        x = self.conv1_down(x),
-        x = self.conv2_down(x),
-        x = self.conv3_down(x),
-        x = self.conv4_down(x),
+        x = self.conv1_down(x)
+        x = self.conv2_down(x)
+        x = self.conv3_down(x)
+        x = self.conv4_down(x)
         
         for _ in range(self.bottle_neck_len):
             x = self.bottle_neck(x)
             
-        x = self.conv4_up(x),
-        x = self.conv3_up(x),
-        x = self.conv2_up(x),
+        x = self.conv4_up(x)
+        x = self.conv3_up(x)
+        x = self.conv2_up(x)
         
         image_reg = self.conv1_up_image_reg(x)
         attention_reg = self.conv1_up_attention_reg(x)
